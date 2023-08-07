@@ -1,9 +1,9 @@
-// import npm packages
+// require npm packages
 const express = require('express')
 const logger = require('morgan')
 const path = require('path')
 
-// import routers
+// require routers
 const indexRouter = require('./routes/index.js')
 
 // create the express app
@@ -18,7 +18,7 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.use(express.static(path.join(__dirname, 'public')))
 
-// mount imported routes
+// mount required routes
 app.use('/', indexRouter)
 
 // catch 404 and forward to error handler
