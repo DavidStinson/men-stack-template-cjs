@@ -1,7 +1,9 @@
-// require npm packages
+// require modules and utilities
+const http = require('http')
+const path = require('path')
 const express = require('express')
 const logger = require('morgan')
-const path = require('path')
+const utils = require('./utils/server.js')
 
 // require routers
 const indexRouter = require('./routes/index.js')
@@ -34,9 +36,20 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500)
   res.render('error', {
     errMsg: err.message,
-    // Only provide the full erorr object in development.
+    // Only provide the full error object in development
     error: req.app.get('env') === 'development' ? err : {}
   })
 })
 
-module.exports = app
+// create node HTTP server
+const server = http.createServer(app)
+
+// get port from environment or use port 3000
+const port = utils.normalizePort(process.env.PORT || '3000')
+
+// listen on provided port on all network interfaces
+server.listen(port)
+
+// server event listeners
+server.on('error', (err) => utils.onError(err, port))
+server.on('listening', () => utils.onListening(port))

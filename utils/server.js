@@ -1,18 +1,4 @@
-// module dependencies
-const app = require('../server.js')
-const http = require('http')
-
-// get port from environment and store in express
-const port = normalizePort(process.env.PORT || '3000')
-app.set('port', port)
-
-// create HTTP server
-const server = http.createServer(app)
-
-// listen on provided port on all network interfaces
-server.listen(port)
-server.on('error', onError)
-server.on('listening', onListening)
+// ! utilities to help run the server
 
 // normalize a port into a number, string, or false
 function normalizePort(val) {
@@ -28,9 +14,9 @@ function normalizePort(val) {
 }
 
 // event listener for HTTP server error event
-function onError(error) { 
+function onError(error, port) {
   if (error.syscall !== 'listen') throw error
-
+  
   const bind = typeof port === 'string'? `Pipe ${port}`: `Port ${port}`
 
   // handle specific listen errors with friendly messages
@@ -47,8 +33,13 @@ function onError(error) {
 }
 
 // event listener for HTTP server listening event
-function onListening() {
-  const addr = server.address()
-  const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`
-  console.log(`Listening on ${bind}`)
+function onListening(port) {
+  const bind = typeof port === 'string' ? `pipe ${addr}` : `port ${port}`
+  console.log(`Hear that? That's the sound of a server running on ${bind}!`)
+}
+
+module.exports = {
+  normalizePort,
+  onError,
+  onListening,
 }
